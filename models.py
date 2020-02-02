@@ -1,6 +1,6 @@
 class Schedule():
     def __init__(self):
-        self.classList = {"1_a1": None, "2_a1": None}
+        self.classList = {"1_a1": None, "1_b1": None, }
 
 class Student():
     def __init__(self, grade):
@@ -37,7 +37,7 @@ class Class():
     def __init__(self):
         self.studentList = []
         self.seats
-        self.period
+        self.periods # to account for classes that occur multiple periods
         self.cycle
         self.section
         self.teacher
@@ -89,4 +89,5 @@ class GraduationRequriementsPath():
         self.grades_reqs_dict
 
 class Defaults():
-    self.defaultGraduationRequirementPath
+    def __init__(self):
+        self.defaultGraduationRequirementPath
