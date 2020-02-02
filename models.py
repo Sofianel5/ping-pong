@@ -89,4 +89,5 @@ class GraduationRequriementsPath():
         self.grades_reqs_dict
 
 class Defaults():
-    self.defaultGraduationRequirementPath
+    def __init__(self):
+        self.defaultGraduationRequirementPath
