@@ -1,6 +1,6 @@
 class Schedule():
     def __init__(self):
-        self.classList = []
+        self.classList = {"1_a1": None, "2_a1": None}
 
 class Student():
     def __init__(self, grade):
@@ -18,7 +18,7 @@ class Course():
     def __init__(self, seats, prefs=None):
         self.course_id
         self._periods = []
-        self.prefs
+        self.prefs = prefs
         self.department
         self.subject
         self.permissions = []
@@ -41,9 +41,9 @@ class Class():
         self.cycle
         self.section
         self.teacher
-    
+
 class Permission():
-    def __init__(self): 
+    def __init__(self):
         self.operator
         self.conditions
 
@@ -74,7 +74,7 @@ class QualifyForCondition(Condition):
 class GradeCondition(Condition):
     def __init__(self):
         self.course
-        self.grade 
+        self.grade
         self.coursePreReq
     def applyCondition(self, student):
         pass
@@ -86,13 +86,7 @@ class GraduationRequirements():
 
 class GraduationRequriementsPath():
     def __init__(self):
-        self.grades_reqs_dict 
+        self.grades_reqs_dict
 
 class Defaults():
     self.defaultGraduationRequirementPath
-
-
-
-
-
-
