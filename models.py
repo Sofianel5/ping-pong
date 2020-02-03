@@ -1,6 +1,6 @@
 class Schedule():
     def __init__(self):
-        self.classList = {"1_a1": None, "1_b1": None, }
+        self.classList = { "1_a1": None, "1_b1": None }
 
 class Student():
     def __init__(self, grade):
@@ -23,7 +23,7 @@ class Course():
         self.subject
         self.permissions = []
         self.gradReqs = []
-        self.syllabus
+        self.syllabus = ""
         self.description
         self.courseGroup
     def qualifies(self):
@@ -31,9 +31,10 @@ class Course():
 
 class CourseGroup():
     def __init__(self):
+        self.name = ""
         self.courses = []
 
-class Class():
+class Section():
     def __init__(self):
         self.studentList = []
         self.seats
