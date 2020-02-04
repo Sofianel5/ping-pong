@@ -8,10 +8,26 @@ class Student():
         self.grade = grade
         self.gradRequirements
         self.reportCard
+        self.tradeList = []
+        self.points = []
     def hasPassed(self, course):
         pass
     def isTaking(self, course):
         return course in self.schedule
+
+class Trade():
+    def __init__(self, student1, secion1, student2, section2):
+        self.s1 = student1
+        self.s2 = student2
+        self.c1 = section1
+        self.c2 = section2
+    def execute():
+        #check if the requirements are fulfulled or are overrided
+        pass
+
+class Administrator():
+    def __init__(self):
+        return
 
 
 class Course():
