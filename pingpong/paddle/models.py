@@ -2,13 +2,12 @@ from django.db import models
 
 # Create your models here.
 class Grade(models.Model):
-    class Grades(models.TextChoices):
+    class Grades(models.enums.TextChoices):
         FRESHMAN = 'FR', 'Freshman'
         SOPHOMORE = 'SO', 'Sophomore'
         JUNIOR = 'JR', 'Junior'
         SENIOR = 'SR', 'Senior'
-        GRADUATE = 'GR', 'Graduate'
-    name = models.CharField(choices=Grades.choices, default=Grades.FRESHMAN)
+    name = models.CharField(choices=Grades.choices, default=Grades.FRESHMAN, max_length=2)
     def greater(self, grade2, grades=Grades.choices):
         grades = [grade for grade in grades]
         return grades.index(self.name) < grades.index(self.name)
@@ -22,54 +21,75 @@ class Rotation(models.Model):
 
 class Period(models.Model):
     number = models.IntegerField()
-    rotation = models.ForeignKey("paddle.models.Rotation", on_delete=models.DO_NOTHING)
+    rotation = models.ForeignKey("paddle.Rotation", on_delete=models.DO_NOTHING)
 
 class Schedule(models.Model):
-    classes = models.ManyToManyField("paddle.models.Section")
+    classes = models.ManyToManyField("paddle.Section")
 
 class Teacher(models.Model):
     name = models.CharField(max_length=50)
 
+class Department(models.Model):
+    name = models.CharField(max_length=50)
+
 class Section(models.Model):
     seats = models.IntegerField()
-    course = models.ForeignKey("paddle.models.Course", on_delete=models.DO_NOTHING)
-    period = models.ManyToManyField("paddle.models.Period", on_delete=models.DO_NOTHING)
+    course = models.ForeignKey("paddle.Course", on_delete=models.DO_NOTHING)
+    period = models.ManyToManyField("paddle.Period")
 
 class Student(models.Model):
-    schedule = models.ForeignKey("paddle.models.Schedule", on_delete=models.DO_NOTHING)
-    grade = models.ForeignKey("paddle.models.Grade", on_delete=models.DO_NOTHING)
-    graduationrequirements = models.ForeignKey("paddle.models.GraduationRequirements", on_delete=models.DO_NOTHING)
-    reportCard = models.ForeignKey("paddle.models.ReportCard", on_delete=models.DO_NOTHING)
-    classWeights = models.ForeignKey("paddle.models.WeightedClassList", on_delete=models.DO_NOTHING)
-    points = models.ForeignKey("paddle.models.PointsCounter", on_delete=models.DO_NOTHING)
+    schedule = models.ForeignKey("paddle.Schedule", on_delete=models.DO_NOTHING)
+    grade = models.ForeignKey("paddle.Grade", on_delete=models.DO_NOTHING)
+    graduationrequirements = models.ForeignKey("paddle.GraduationRequirements", on_delete=models.DO_NOTHING)
+    reportCard = models.ForeignKey("paddle.ReportCard", on_delete=models.DO_NOTHING)
+    classWeights = models.ForeignKey("paddle.WeightedClassList", on_delete=models.DO_NOTHING)
+    points = models.ForeignKey("paddle.PointsCounter", on_delete=models.DO_NOTHING)
     def hasPassed(self, course):
         pass
     def isTaking(self, course):
         pass
 
+class Subject(models.Model):
+    name = models.CharField(max_length=15)
+
 class Course(models.Model):
     course_id = models.CharField(max_length=50)
     # Related class Section has superclass Course and can relate to it
-    prefs = models.ForeignKey("paddle.models.Prefrences", on_delete=models.DO_NOTHING)
-    department = models.ForeignKey("paddle.models.Department", on_delete=models.DO_NOTHING)
-    subject = models.ForeignKey("paddle.models.Subject", on_delete=models.DO_NOTHING)
-    permissions = models.ForeignKey("paddle.models.PermissionsList", on_delete=models.DO_NOTHING)
-    reqsFulfilled = models.ForeignKey("paddle.models.Requirements", on_delete=models.DO_NOTHING)
+    prefs = models.ForeignKey("paddle.Prefrences", on_delete=models.DO_NOTHING)
+    department = models.ForeignKey("paddle.Department", on_delete=models.DO_NOTHING)
+    subject = models.ForeignKey("paddle.Subject", on_delete=models.DO_NOTHING)
+    permissions = models.ForeignKey("paddle.PermissionsList", on_delete=models.DO_NOTHING)
+    reqsFulfilled = models.ForeignKey("paddle.Requirements", on_delete=models.DO_NOTHING)
     syllabus = models.FileField()
     description = models.TextField()
-    course_group = reqsFulfilled = models.ForeignKey("paddle.models.CourseGroup", on_delete=models.DO_NOTHING)
+    course_group = models.ForeignKey("paddle.CourseGroup", on_delete=models.DO_NOTHING)
     def qualifies(self, student):
         pass
+
+class WeightedCourse(models.Model):
+    course = models.ForeignKey("paddle.Course", on_delete=models.DO_NOTHING)
+    weight = models.IntegerField()
+
+class WeightedCourseList(models.Model):
+    courses = models.ManyToManyField("paddle.WeightedCourse")
+
+class GradedCourse(models.Model):
+    course = models.ForeignKey("paddle.Course", on_delete=models.DO_NOTHING)
+    grade = models.FloatField()
 
 class CourseGroup(models.Model):
     name = models.CharField(max_length=50)
 
+class GraduationRequirements(models.Model):
+    
 # create class Operator 
-
 class Permission(models.Model):
     OPERATORS = (("OR", "or"), ("AND", "and"))
-    conditions = models.ManyToManyField("paddle.models.Condition", on_delete=models.DO_NOTHING)
+    conditions = models.ManyToManyField("paddle.Condition")
     operator = models.CharField(choices=OPERATORS, max_length=5)
+
+class PermissionsList(models.Model):
+    pass 
 
 class Condition(models.Model):
     name = models.CharField(max_length=20)
