@@ -49,6 +49,9 @@ class Student(models.Model):
     def isTaking(self, course):
         pass
 
+class ReportCard(models.Model):
+    grades = models.ManyToManyField("paddle.GradedCourse")
+
 class Subject(models.Model):
     name = models.CharField(max_length=15)
 
@@ -81,7 +84,7 @@ class CourseGroup(models.Model):
     name = models.CharField(max_length=50)
 
 class GraduationRequirements(models.Model):
-    
+    pass
 # create class Operator 
 class Permission(models.Model):
     OPERATORS = (("OR", "or"), ("AND", "and"))
@@ -89,7 +92,7 @@ class Permission(models.Model):
     operator = models.CharField(choices=OPERATORS, max_length=5)
 
 class PermissionsList(models.Model):
-    pass 
+    pass
 
 class Condition(models.Model):
     name = models.CharField(max_length=20)
