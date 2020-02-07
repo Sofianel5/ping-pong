@@ -2,13 +2,15 @@ from django.db import models
 
 # Create your models here.
 class Grade(models.Model):
-    class Grades(models.enums.TextChoices):
-        FRESHMAN = 'FR', 'Freshman'
-        SOPHOMORE = 'SO', 'Sophomore'
-        JUNIOR = 'JR', 'Junior'
-        SENIOR = 'SR', 'Senior'
-    name = models.CharField(choices=Grades.choices, default=Grades.FRESHMAN, max_length=2)
-    def greater(self, grade2, grades=Grades.choices):
+    Grades = (
+        ('FR', 'Freshman'),
+        ('SO', 'Sophomore'),
+        ('JR', 'Junior'),
+        ('SR', 'Senior')
+    )
+    name = models.CharField(choices=Grades, default=Grades[0], max_length=2)
+    
+    def greater(self, grade2, grades=Grades):
         grades = [grade for grade in grades]
         return grades.index(self.name) < grades.index(self.name)
 
@@ -42,7 +44,7 @@ class Student(models.Model):
     grade = models.ForeignKey("paddle.Grade", on_delete=models.DO_NOTHING)
     graduationrequirements = models.ForeignKey("paddle.GraduationRequirements", on_delete=models.DO_NOTHING)
     reportCard = models.ForeignKey("paddle.ReportCard", on_delete=models.DO_NOTHING)
-    classWeights = models.ForeignKey("paddle.WeightedClassList", on_delete=models.DO_NOTHING)
+    classWeights = models.ForeignKey("paddle.WeightedCourseList", on_delete=models.DO_NOTHING)
     points = models.ForeignKey("paddle.PointsCounter", on_delete=models.DO_NOTHING)
     def hasPassed(self, course):
         pass
@@ -62,11 +64,14 @@ class Course(models.Model):
     department = models.ForeignKey("paddle.Department", on_delete=models.DO_NOTHING)
     subject = models.ForeignKey("paddle.Subject", on_delete=models.DO_NOTHING)
     permissions = models.ForeignKey("paddle.PermissionsList", on_delete=models.DO_NOTHING)
-    reqsFulfilled = models.ForeignKey("paddle.Requirements", on_delete=models.DO_NOTHING)
     syllabus = models.FileField()
     description = models.TextField()
     course_group = models.ForeignKey("paddle.CourseGroup", on_delete=models.DO_NOTHING)
     def qualifies(self, student):
+        pass
+
+class Prefrences(models.Model):
+    def scoreStudent(self, student):
         pass
 
 class WeightedCourse(models.Model):
@@ -82,9 +87,11 @@ class GradedCourse(models.Model):
 
 class CourseGroup(models.Model):
     name = models.CharField(max_length=50)
+    fulfilling_courses = models.ForeignKey("paddle.Course", on_delete=models.DO_NOTHING)
 
 class GraduationRequirements(models.Model):
     pass
+
 # create class Operator 
 class Permission(models.Model):
     OPERATORS = (("OR", "or"), ("AND", "and"))
