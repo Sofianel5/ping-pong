@@ -1,3 +1,24 @@
 from django.contrib import admin
-
+from .models import *
 # Register your models here.
+admin.site.register(Grade)
+admin.site.register(PointsCounter)
+admin.site.register(Rotation)
+admin.site.register(Period)
+admin.site.register(Schedule)
+admin.site.register(Teacher)
+admin.site.register(Department)
+admin.site.register(Section)
+admin.site.register(Student)
+admin.site.register(ReportCard)
+admin.site.register(Subject)
+admin.site.register(Course)
+admin.site.register(Prefrences)
+admin.site.register(WeightedCourse)
+admin.site.register(WeightedCourseList)
+admin.site.register(GradedCourse)
+admin.site.register(CourseGroup)
+admin.site.register(GraduationRequirements)
+admin.site.register(Permission)
+admin.site.register(Condition)
+admin.site.register(Defaults)
