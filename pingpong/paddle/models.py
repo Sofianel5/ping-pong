@@ -25,7 +25,6 @@ class Rotation(models.Model):
     name = models.CharField(max_length=5)
     def __str__(self):
         return self.name
-    
 
 class Period(models.Model):
     number = models.IntegerField()
@@ -61,10 +60,10 @@ class Section(models.Model):
         return self.course
 
 class Student(models.Model):
-    schedule = models.ForeignKey("paddle.Schedule", on_delete=models.DO_NOTHING)
+    schedule = models.ForeignKey("paddle.Schedule", on_delete=models.DO_NOTHING, blank=True, null=True)
     grade = models.ForeignKey("paddle.Grade", on_delete=models.DO_NOTHING)
-    graduationrequirements = models.ForeignKey("paddle.GraduationRequirements", on_delete=models.DO_NOTHING)
-    reportCard = models.ForeignKey("paddle.ReportCard", on_delete=models.DO_NOTHING)
+    graduationrequirements = models.ForeignKey("paddle.GraduationRequirements", on_delete=models.DO_NOTHING, blank=True, null=True)
+    reportCard = models.ForeignKey("paddle.ReportCard", on_delete=models.DO_NOTHING, blank=True, null=True)
     classWeights = models.ForeignKey("paddle.WeightedCourseList", on_delete=models.DO_NOTHING)
     points = models.ForeignKey("paddle.PointsCounter", on_delete=models.DO_NOTHING)
     courses_taken = models.ForeignKey("paddle.CourseCompletionList", on_delete=models.DO_NOTHING, blank=True, null=True)
@@ -120,7 +119,7 @@ class WeightedCourse(models.Model):
     course = models.ForeignKey("paddle.Course", on_delete=models.DO_NOTHING)
     weight = models.IntegerField()
     def __str__(self):
-        return self.course
+        return self.course.name
 
 class WeightedCourseList(models.Model):
     courses = models.ManyToManyField("paddle.WeightedCourse")
@@ -129,7 +128,7 @@ class GradedCourse(models.Model):
     course = models.ForeignKey("paddle.Course", on_delete=models.DO_NOTHING)
     grade = models.FloatField()
     def __str__(self):
-        return self.course
+        return self.course.name
 
 class CourseGroup(models.Model):
     name = models.CharField(max_length=50)
