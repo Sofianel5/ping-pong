@@ -96,7 +96,7 @@ class Course(models.Model):
     prefs = models.ForeignKey("paddle.Prefrences", on_delete=models.DO_NOTHING)
     department = models.ForeignKey("paddle.Department", on_delete=models.DO_NOTHING)
     subject = models.ForeignKey("paddle.Subject", on_delete=models.DO_NOTHING)
-    permissions = models.ManyToManyField("paddle.Permission", blank=True, null=True)
+    permissions = models.ManyToManyField("paddle.Permission", blank=True)
     syllabus = models.FileField(blank=True, null=True)
     description = models.TextField(default="There is no description for this course.")
     course_group = models.ForeignKey("paddle.CourseGroup", on_delete=models.DO_NOTHING)
@@ -133,8 +133,9 @@ class GradedCourse(models.Model):
 
 class CourseGroup(models.Model):
     name = models.CharField(max_length=50)
+    level = models.IntegerField()
     def __str__(self):
-        return self.name
+        return self.name + " " +str(self.level)
 
 class GraduationRequirements(models.Model):
     pass
