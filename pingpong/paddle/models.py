@@ -96,7 +96,7 @@ class Course(models.Model):
     prefs = models.ForeignKey("paddle.Prefrences", on_delete=models.DO_NOTHING)
     department = models.ForeignKey("paddle.Department", on_delete=models.DO_NOTHING)
     subject = models.ForeignKey("paddle.Subject", on_delete=models.DO_NOTHING)
-    permissions = models.ManyToManyField("paddle.Permission")
+    permissions = models.ManyToManyField("paddle.Permission", blank=True, null=True)
     syllabus = models.FileField(blank=True, null=True)
     description = models.TextField(default="There is no description for this course.")
     course_group = models.ForeignKey("paddle.CourseGroup", on_delete=models.DO_NOTHING)
