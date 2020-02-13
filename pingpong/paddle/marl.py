@@ -1,10 +1,27 @@
-from rlib import Policy
+from rllib.policy.policy import TFPolicy
 from abc import ABCMeta, abstractmethod
 from collections import namedtuple
 import gym
 import numpy as np
+from rllib.env.multi_agent_env import MultiAgentEnv
 
-class StudentPolicy(Policy):
+class Config():
+    """ Model related settings """
+    ACTION_SET = ["SELL", "BUY"]
+    NUM_PERIODS = 10
+    MIN_POINTS = 0
+    MAX_POINTS = 100
+    
+    """ RL related settings """
+    STUDENT_OBSERVATION_SPACE = gym.spaces.Box(MIN_POINTS,MAX_POINTS,shape=(10,))
+    STUDENT_ACTION_SPACE = gym.spaces.MultiDiscrete([len(ACTION_SET) for period in range(NUM_PERIODS)]) # plus one for do nothing
+
+class StudentEnv(MultiAgentEnv):
+    def __init__(self):
+        self.action_space = Config.STUDENT_ACTION_SPACE # plus one for do nothing
+        self.observation_space = Config.STUDENT_OBSERVATION_SPACE
+
+class StudentPolicy(TFPolicy):
     """An agent policy and loss, i.e., a TFPolicy or other subclass.
     This object defines how to act in the environment, and also losses used to
     improve the policy based on its experiences. Note that both policy and

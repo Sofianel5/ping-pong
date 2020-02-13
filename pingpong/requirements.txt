@@ -1,4 +1,5 @@
 numpy
 tensorflow 
-rlib
+ray[rllib]
+ray[debug]
 gym 
