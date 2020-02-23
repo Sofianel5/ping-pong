@@ -101,7 +101,10 @@ class Course(models.Model):
     course_group = models.ForeignKey("paddle.CourseGroup", on_delete=models.DO_NOTHING)
     def qualifies(self, student):
         # Apply permissions
-        pass
+        for permission in self.permissions:
+            if not permission.apply(student):
+                return False 
+        return True
     def __str__(self):
         return self.name
     
@@ -139,19 +142,35 @@ class CourseGroup(models.Model):
 class GraduationRequirements(models.Model):
     pass
 
-# create class Operator 
+
 class Permission(models.Model):
+    """
+    Right now this doesnt allow for recursive permissions, 
+    update in future by creating a subclass of permission as BasePermission
+     to replace condition and change manyToMany("paddle.Permission") so it can refer to full sub permissions or simple conditions
+    """
     OPERATORS = (("OR", "or"), ("AND", "and"))
     conditions = models.ManyToManyField("paddle.Condition")
     operator = models.CharField(choices=OPERATORS, max_length=5)
+    def apply(self, student):
+        if self.operator == "OR":
+            for condition in self.conditions:
+                if condition.applyCondition(student):
+                    return True 
+            return False
+        else:
+            for condition in self.conditions:
+                if not condition.applyCondition(student):
+                    return False 
+            return True
     def __str__(self):
         return (" "+self.operator+" ").join([conditon for conditon in self.conditions])
 
 class Condition(models.Model):
     name = models.CharField(max_length=20)
     condition_func = models.CharField(max_length=20, default="no_condition")
-    def applyCondition(self, delegate):
-        pass
+    def applyCondition(self, student):
+        return exec(self.name+"(student)")
     def __str__(self):
         return self.name
     
