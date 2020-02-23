@@ -8,18 +8,31 @@ from rllib.env.multi_agent_env import MultiAgentEnv
 class Config():
     """ Model related settings """
     ACTION_SET = ["SELL", "BUY"]
-    NUM_PERIODS = 10
+    MAX_CLASS_ID = 500
+    NUM_PERIODS = 10 # later extend to 40 
     MIN_POINTS = 0
     MAX_POINTS = 100
+    CLASS_BIN_SIZE = 20
     
     """ RL related settings """
-    STUDENT_OBSERVATION_SPACE = gym.spaces.Box(MIN_POINTS,MAX_POINTS,shape=(10,))
-    STUDENT_ACTION_SPACE = gym.spaces.MultiDiscrete([len(ACTION_SET) for period in range(NUM_PERIODS)]) # plus one for do nothing
+    STUDENT_OBSERVATION_SPACE = gym.spaces.Dict({
+        "my_classes": gym.spaces.Box(low=0, high=MAX_CLASS_ID, shape=(NUM_PERIODS,))
+        "available_classes": gym.spaces.Box(low=0, high=MAX_CLASS_ID, shape=(CLASS_BIN_SIZE,))
+    })
+    STUDENT_ACTION_SPACE = gym.spaces.Dict({
+        "trade_out": gym.spaces.Discrete(NUM_PERIODS-1) # the index of which class to trade out
+        "trade_in": gym.spaces.Box(low=np.array([0,0]), high=np.array([CLASS_BIN_SIZE-1, NUM_PERIODS-1]), shape=(2,)) #  [intaking index, out index] 
+    })
 
 class StudentEnv(MultiAgentEnv):
     def __init__(self):
         self.action_space = Config.STUDENT_ACTION_SPACE # plus one for do nothing
         self.observation_space = Config.STUDENT_OBSERVATION_SPACE
+
+    def reset(self):
+        pass 
+    def step(self, action, agent):
+        pass
 
 class StudentPolicy(TFPolicy):
     """An agent policy and loss, i.e., a TFPolicy or other subclass.
@@ -35,7 +48,7 @@ class StudentPolicy(TFPolicy):
         observation_space (gym.Space): Observation space of the policy.
         action_space (gym.Space): Action space of the policy.
     """
-    def __init__(self, observation_space, action_space, config):
+    def __init__(self, observation_space, action_space, config, id):
         """Initialize the graph.
         This is the standard constructor for policies. The policy
         class you pass into RolloutWorker will be constructed with
@@ -48,7 +61,8 @@ class StudentPolicy(TFPolicy):
         self.observation_space = observation_space
         self.action_space = action_space
         self.config = config
-
+        self.student_id = id
+        
     @abstractmethod
     def compute_actions(self,
                         obs_batch,
