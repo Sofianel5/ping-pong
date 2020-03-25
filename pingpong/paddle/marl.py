@@ -38,9 +38,11 @@ class BuyEnv(MultiAgentEnv):
     def __init__(self):
         self.action_space = Config.BUY_ACTION_SPACE
         self.observation_space = Config.BUY_OBS_SPACE
+        self.agents = []
 
     def reset(self):
-        pass 
+        for agent in agents:
+            agent.reset 
 
     def step(self, action, agent):
         pass
@@ -49,6 +51,7 @@ class SellEnv(MultiAgentEnv):
     def __init__(self):
         self.action_space = Config.SELL_ACTION_SPACE 
         self.observation_space = Config.SELL_OBS_SPACE
+        self.agents = []
 
     def reset(self):
         pass 
