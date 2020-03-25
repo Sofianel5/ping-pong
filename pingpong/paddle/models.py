@@ -73,8 +73,11 @@ class Student(models.Model):
         pass
     def isTaking(self, course):
         pass
+    def getRequiredCourses(self):
+        pass
     def __str__(self):
         return self.name
+    
     
 class CourseCompletionList(models.Model):
     schedules = models.ManyToManyField("paddle.Schedule")

@@ -1,8 +1,10 @@
 from .models import Student, Section
 
 def create_initial_rollout():
-    for section in Section.objects.all():
-        students = getStudentsForCourse(section.course)
+    for student in Student.objects.all():
+        courses = student.getRequiredCourseGroups(section.course)
+        for courseGroup in courses:
+            student.schedule.add(courseGroup.getASection())
 
 def getStudentsForCourse(course):
     students = []
