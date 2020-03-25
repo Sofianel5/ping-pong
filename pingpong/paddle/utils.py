@@ -1,6 +1,6 @@
 from .models import Student, Section
 
-def create_initial_setup():
+def create_initial_rollout():
     for section in Section.objects.all():
         students = getStudentsForCourse(section.course)
 

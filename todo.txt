@@ -1,1 +1,2 @@
 Permissions that say you cant take courses multiple times, or skip courses
+size the class bin to the max number of seats that can be empty in school

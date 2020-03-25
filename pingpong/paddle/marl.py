@@ -25,6 +25,7 @@ class Config():
         "trade_in": gym.spaces.Box(low=np.array([0,0]), high=np.array([CLASS_BIN_SIZE-1, NUM_PERIODS-1]), shape=(2,)), #  [intaking index, out index] 
         "do_nothing": gym.spaces.Discrete(2)
     })
+    
 
 class StudentEnv(MultiAgentEnv):
     def __init__(self):
