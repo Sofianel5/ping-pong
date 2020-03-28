@@ -51,7 +51,7 @@ class BuyEnv(MultiAgentEnv):
         pass # return dict of {agent: obs space,...}
     
     def get_subject(self, agent_str):
-        config.subject.objects.get(pk=agent_str[2:])
+        Config.subject.objects.get(pk=agent_str[2:])
     
     def _obs_space(self):
         pass
